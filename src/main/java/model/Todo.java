@@ -1,22 +1,22 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Todo /* extends PanacheEntity */ {
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+
+@Entity
+public class Todo extends PanacheEntity {
 
     public String task;
     public Date completed;
     
-    // Mocking of existing data, this would normally be in your DB and go via Hibernate/Panache
-    private static final List<Todo> all = new ArrayList<>();
-    
-    public static List<Todo> listAll(){
-        return all;
-    }
+    @ManyToOne
+    public User owner;
 
-    public void persist() {
-        all.add(this);
-    }
+	public static List<Todo> listAll(User user) {
+		return list("owner", user);
+	}
 }

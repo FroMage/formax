@@ -34,8 +34,21 @@
       <version>3.0.4</version>
     </dependency>
     <dependency>
+      <groupId>io.quarkiverse.renarde</groupId>
+      <artifactId>quarkus-renarde-oidc</artifactId>
+      <version>3.0.4</version>
+    </dependency>
+    <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-hibernate-orm-panache</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jdbc-postgresql</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>

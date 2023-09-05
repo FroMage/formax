@@ -18,9 +18,16 @@
   </head>
   <body>
     <div class="head">
+      {#if inject:user}
+        {#gravatar inject:user.email size=20 default='mm' /}
+		{inject:user.firstName} {inject:user.lastName}
+      {/if}
       <!-- You can make links to actions using the uri: namespace -->
       <div><a href="{uri:Todos.index}">Index</a></div>
       <div><a href="{uri:Todos.todos}">Todos</a></div>
+      {#if inject:user}
+	      <div><a href="{uri:RenardeSecurityController.logout()}">Logout</a></div>
+      {/if}  
     </div>
     <!-- This inserts the body of your templates -->
     {#insert /}

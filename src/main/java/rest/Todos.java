@@ -9,14 +9,19 @@ import jakarta.ws.rs.Path;
 import org.jboss.resteasy.reactive.RestForm;
 
 import io.quarkus.qute.TemplateInstance;
+import io.quarkus.security.Authenticated;
+import io.smallrye.common.annotation.Blocking;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkiverse.renarde.Controller;
+import io.quarkiverse.renarde.security.ControllerWithUser;
 import model.Todo;
+import model.User;
 
 /**
  * This defines a REST controller, each method will be available under the "Classname/method" URI by convention
  */
-public class Todos extends Controller {
+@Blocking
+public class Todos extends ControllerWithUser<User> {
     
     /**
      * This defines templates available in src/main/resources/templates/Classname/method.html by convention
@@ -33,20 +38,22 @@ public class Todos extends Controller {
         public static native TemplateInstance todos(List<Todo> todos);
     }
 
-    // This overrides the convention and makes this method available at "/renarde"
-    @Path("/renarde")
+    // This overrides the convention and makes this method available at "/"
+    @Path("/")
     public TemplateInstance index() {
         // renders the Todos/index.html template
         return Templates.index();
     }
 
+    @Authenticated
     public TemplateInstance todos() {
         // renders the Todos/todos.html template with our list of Todo entities
-        return Templates.todos(Todo.listAll());
+        return Templates.todos(Todo.listAll(getUser()));
     }
     
     // Creates a POST action at Todos/add taking a form element named task
     @POST
+    @Authenticated
     public void add(@RestForm @NotBlank String task) {
         // If validation fails, redirect to the todos page (with errors propagated)
         if(validationFailed()) {
@@ -56,6 +63,7 @@ public class Todos extends Controller {
         // save the new Todo
         Todo todo = new Todo();
         todo.task = task;
+        todo.owner = getUser();
         todo.persist();
         // redirect to the todos page
         todos();
